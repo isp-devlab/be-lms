@@ -10,15 +10,19 @@ export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
     const registerSchema = schema.create({
       name: schema.string(),
+      phoneNumber: schema.string(),
       email: schema.string([rules.email(), rules.unique({ table: 'users', column: 'email' })]),
       password: schema.string([rules.minLength(6)]),
+      isStudent: schema.boolean(),
     })
     const payload = await request.validate({ schema: registerSchema })
 
     const user = new User()
     user.name = payload.name
+    user.phoneNumber = payload.phoneNumber
     user.email = payload.email
     user.password = payload.password
+    user.isStudent = payload.isStudent
     const data = await user.save()
 
     return ApiResponse.created(response, data, 'User register created successfully')

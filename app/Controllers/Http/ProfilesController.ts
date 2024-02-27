@@ -10,6 +10,7 @@ export default class ProfilesController {
 
     const ProfileUpdateSchema = schema.create({
       name: schema.string(),
+      phoneNumber: schema.string(),
       email: schema.string([
         rules.email(),
         rules.unique({
@@ -35,6 +36,7 @@ export default class ProfilesController {
     if (payload.image) {
       user.image = payload.image?.clientName
     }
+    user.phoneNumber = payload.phoneNumber
     const data = await user.save()
 
     return ApiResponse.ok(response, data, 'Profile update successfully')

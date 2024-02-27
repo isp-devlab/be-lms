@@ -21,7 +21,16 @@ export default class User extends BaseModel {
   public id: string
 
   @column()
+  public roleId: string | undefined
+
+  @belongsTo(() => Role)
+  public role: BelongsTo<typeof Role>
+
+  @column()
   public name: string
+
+  @column()
+  public phoneNumber: string
 
   @column()
   public email: string
@@ -36,10 +45,7 @@ export default class User extends BaseModel {
   public image: string | null
 
   @column()
-  public roleId: string | undefined
-
-  @belongsTo(() => Role)
-  public role: BelongsTo<typeof Role>
+  public isStudent: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
