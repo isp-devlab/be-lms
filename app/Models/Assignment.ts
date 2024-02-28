@@ -15,16 +15,16 @@ export default class Assignment extends BaseModel {
   public id: string
 
   @column()
-  public groupId: string | undefined
-
-  @belongsTo(() => Group)
-  public group: BelongsTo<typeof Group>
-
-  @column()
   public mentorId: string | undefined
 
   @belongsTo(() => Mentor)
   public mentor: BelongsTo<typeof Mentor>
+
+  @column()
+  public groupId: string | undefined
+
+  @belongsTo(() => Group)
+  public group: BelongsTo<typeof Group>
 
   @column()
   public startTime: DateTime

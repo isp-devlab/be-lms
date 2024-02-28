@@ -15,16 +15,16 @@ export default class Comment extends BaseModel {
   public id: string
 
   @column()
-  public userId: string | undefined
-
-  @belongsTo(() => User)
-  public user: BelongsTo<typeof User>
-
-  @column()
   public discussionId: string | undefined
 
   @belongsTo(() => Discussion)
   public discussion: BelongsTo<typeof Discussion>
+
+  @column()
+  public userId: string | undefined
+
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 
   @column()
   public content: string

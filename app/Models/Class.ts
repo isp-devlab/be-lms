@@ -14,16 +14,16 @@ export default class Class extends BaseModel {
   public id: string
 
   @column()
-  public mentorId: string | undefined
-
-  @belongsTo(() => Mentor)
-  public mentor: BelongsTo<typeof Mentor>
-
-  @column()
   public categoryId: string | undefined
 
   @belongsTo(() => Category)
   public category: BelongsTo<typeof Category>
+
+  @column()
+  public mentorId: string | undefined
+
+  @belongsTo(() => Mentor)
+  public mentor: BelongsTo<typeof Mentor>
 
   @column()
   public name: string

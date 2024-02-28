@@ -7,18 +7,18 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table
-        .uuid('user_id')
-        // .unsigned()
-        .references('id')
-        .inTable('users')
-        .onDelete('CASCADE')
-        .onUpdate('RESTRICT')
-        .notNullable()
-      table
         .uuid('discussion_id')
         // .unsigned()
         .references('id')
         .inTable('discussions')
+        .onDelete('CASCADE')
+        .onUpdate('RESTRICT')
+        .notNullable()
+      table
+        .uuid('user_id')
+        // .unsigned()
+        .references('id')
+        .inTable('users')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
         .notNullable()
