@@ -58,5 +58,9 @@ Route.group(() => {
       Route.put('/profile', 'ProfilesController.update')
       Route.put('/profile/change-password', 'ProfilesController.changePassword')
     }).middleware('auth')
+
+    Route.group(() => {
+      Route.get('/', 'CategoriesController.index')
+    }).prefix('/category')
   }).prefix('/v1')
 }).prefix('/api')
