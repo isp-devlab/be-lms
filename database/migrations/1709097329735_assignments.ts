@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('mentors')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
-        .nullable()
+        .notNullable()
       table
         .uuid('group_id')
         // .unsigned()
@@ -21,7 +21,7 @@ export default class extends BaseSchema {
         .inTable('groups')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
-        .nullable()
+        .notNullable()
       table.timestamp('start_time').notNullable()
       table.timestamp('end_time').notNullable()
       table.timestamp('created_at', { useTz: true })

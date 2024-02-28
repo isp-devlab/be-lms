@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('classes')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
-        .nullable()
+        .notNullable()
       table.string('title').notNullable()
       table.string('content').notNullable()
       table.timestamp('created_at', { useTz: true })

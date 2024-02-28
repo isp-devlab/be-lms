@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('mentors')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
-        .nullable()
+        .notNullable()
       table
         .uuid('category_id')
         // .unsigned()
@@ -21,7 +21,7 @@ export default class extends BaseSchema {
         .inTable('categories')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
-        .nullable()
+        .notNullable()
       table.string('name').notNullable()
       table.text('description').notNullable()
       table.string('price').notNullable()

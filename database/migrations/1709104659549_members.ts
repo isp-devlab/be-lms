@@ -1,16 +1,16 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'students'
+  protected tableName = 'members'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table
-        .uuid('class_id')
+        .uuid('group_id')
         // .unsigned()
         .references('id')
-        .inTable('classes')
+        .inTable('groups')
         .onDelete('CASCADE')
         .onUpdate('RESTRICT')
         .notNullable()
