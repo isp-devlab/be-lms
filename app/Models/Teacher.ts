@@ -1,26 +1,28 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Class from './Class'
+import Group from './Group'
 import Mentor from './Mentor'
 import uuid from 'uuid-wand'
 
-export default class Group extends BaseModel {
+export default class Teacher extends BaseModel {
   @beforeCreate()
-  public static async createUUID(model: Group) {
+  public static async createUUID(model: Teacher) {
     model.id = uuid.v4()
   }
 
   @column({ isPrimary: true })
   public id: string
+  @column()
+  public groupId: string | undefined
+
+  @belongsTo(() => Group)
+  public grupu: BelongsTo<typeof Group>
 
   @column()
-  public name: string
+  public mentorId: string | undefined
 
-  @column()
-  public description: string
-
-  @column()
-  public referralCode: string
+  @belongsTo(() => Mentor)
+  public mentor: BelongsTo<typeof Mentor>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

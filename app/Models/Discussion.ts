@@ -7,7 +7,7 @@ import uuid from 'uuid-wand'
 
 export default class Discussion extends BaseModel {
   @beforeCreate()
-  public static async createUUID(model: Class) {
+  public static async createUUID(model: Discussion) {
     model.id = uuid.v4()
   }
 
