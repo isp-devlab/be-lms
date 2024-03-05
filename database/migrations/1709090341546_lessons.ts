@@ -15,6 +15,7 @@ export default class extends BaseSchema {
         .onUpdate('RESTRICT')
         .notNullable()
       table.string('title').notNullable()
+      table.string('lesson_video').notNullable()
       table.string('content').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
