@@ -1,7 +1,6 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Discussion from './Discussion'
-import Class from './Class'
 import User from './User'
 import uuid from 'uuid-wand'
 

@@ -1,7 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Class from './Class'
-import Mentor from './Mentor'
+import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
 
 export default class Group extends BaseModel {
