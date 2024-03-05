@@ -9,7 +9,7 @@ export default class UserSeeder extends BaseSeeder {
         name: 'John Doe',
         email: 'john.doe@example.com',
         phoneNumber: '123',
-        password: await Hash.make('password'),
+        password: 'password',
       },
     ])
   }

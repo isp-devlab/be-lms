@@ -6,6 +6,7 @@ export default class extends BaseSeeder {
     await Category.createMany([
       {
         name: 'PHP',
+        slug: 'php',
       },
     ])
   }
