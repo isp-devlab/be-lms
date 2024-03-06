@@ -6,15 +6,8 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
-      table
-        .uuid('mentor_id')
-        // .unsigned()
-        .references('id')
-        .inTable('mentors')
-        .onDelete('CASCADE')
-        .onUpdate('RESTRICT')
-        .notNullable()
       table.string('name').notNullable()
+      table.string('description').notNullable()
       table.string('referral_code').notNullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

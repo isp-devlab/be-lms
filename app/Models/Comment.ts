@@ -1,13 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Discussion from './Discussion'
-import Class from './Class'
 import User from './User'
 import uuid from 'uuid-wand'
 
 export default class Comment extends BaseModel {
   @beforeCreate()
-  public static async createUUID(model: Class) {
+  public static async createUUID(model: Comment) {
     model.id = uuid.v4()
   }
 

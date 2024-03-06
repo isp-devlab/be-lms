@@ -14,6 +14,9 @@ export default class Class extends BaseModel {
   public id: string
 
   @column()
+  public slug: string
+
+  @column()
   public categoryId: string | undefined
 
   @belongsTo(() => Category)
@@ -39,6 +42,9 @@ export default class Class extends BaseModel {
 
   @column()
   public grade: string
+
+  @column()
+  public isStudent: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

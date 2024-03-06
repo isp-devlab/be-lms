@@ -1,12 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Class from './Class'
-import Mentor from './Mentor'
+import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
 
 export default class Group extends BaseModel {
   @beforeCreate()
-  public static async createUUID(model: Class) {
+  public static async createUUID(model: Group) {
     model.id = uuid.v4()
   }
 
@@ -14,13 +12,10 @@ export default class Group extends BaseModel {
   public id: string
 
   @column()
-  public mentorId: string | undefined
-
-  @belongsTo(() => Mentor)
-  public mentor: BelongsTo<typeof Mentor>
+  public name: string
 
   @column()
-  public name: string
+  public description: string
 
   @column()
   public referralCode: string
