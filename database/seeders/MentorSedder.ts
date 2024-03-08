@@ -1,12 +1,11 @@
-import Hash from '@ioc:Adonis/Core/Hash'
 import BaseSeeder from '@ioc:Adonis/Lucid/Seeder'
-import User from 'App/Models/User'
+import Mentor from 'App/Models/Mentor'
 
-export default class UserSeeder extends BaseSeeder {
+export default class extends BaseSeeder {
   public async run() {
-    await User.createMany([
+    await Mentor.createMany([
       {
-        id: 'a02ec0b6-d04f-43dd-baff-27bc29e9dfd0',
+        id: 'f762beba-769d-4572-a7ad-262eaac01ec9',
         name: 'John Doe',
         email: 'john.doe@example.com',
         phoneNumber: '123',

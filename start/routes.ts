@@ -26,6 +26,10 @@ Route.get('/', async () => {
 Route.group(() => {
   Route.group(() => {
     Route.group(() => {
+      Route.get('/', 'CategoriesController.index')
+    }).prefix('/category')
+
+    Route.group(() => {
       Route.post('/register', 'AuthController.register')
       Route.post('/login', 'AuthController.login')
       Route.post('/logout', 'AuthController.logout').middleware('auth')
@@ -60,7 +64,10 @@ Route.group(() => {
     }).middleware('auth')
 
     Route.group(() => {
-      Route.get('/', 'CategoriesController.index')
-    }).prefix('/category')
+      Route.get('/:id', 'GroupsController.show')
+      Route.post('/join', 'GroupsController.join')
+    })
+      .middleware('auth')
+      .prefix('/group')
   }).prefix('/v1')
 }).prefix('/api')

@@ -1,8 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import ApiResponse from 'App/Helpers/ApiResponse'
-import Application from '@ioc:Adonis/Core/Application'
 import User from 'App/Models/User'
+import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 
 export default class ProfilesController {
   public async update({ auth, request, response }: HttpContextContract) {
@@ -26,15 +26,13 @@ export default class ProfilesController {
     })
     const payload = await request.validate({ schema: ProfileUpdateSchema })
 
-    // Handle file upload for the image
-    if (payload.image) {
-      await payload.image.move(Application.publicPath('user'))
-    }
     const user = await User.findOrFail(getUser.id)
     user.name = payload.name
     user.email = payload.email
+    // Handle file upload for the image
     if (payload.image) {
-      user.image = payload.image?.clientName
+      const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
+      user.image = imagePath.url
     }
     user.phoneNumber = payload.phoneNumber
     const data = await user.save()
