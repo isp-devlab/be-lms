@@ -6,11 +6,26 @@ import Member from 'App/Models/Member'
 import Teacher from 'App/Models/Teacher'
 
 export default class GroupsController {
-  public async show({ response, params }: HttpContextContract) {
+  public async show({ response, params, auth }: HttpContextContract) {
+    const getUser = await auth.use('api').authenticate()
+
     const group = await Group.find(params.id)
     if (!group) return ApiResponse.badRequest(response, 'No data to show.')
+
+    const memberCheck = await Member.query()
+      .where('group_id', group.id)
+      .where('user_id', getUser.id)
+      .first()
+    if (!memberCheck) return ApiResponse.forbidden(response, 'Access denied')
+
     const member = await Member.query().where('group_id', group.id).preload('user')
     const teacher = await Teacher.query().where('group_id', group.id).preload('mentor')
+    // const discussionCount = await Discussion.query()
+    //   .where('group_id', group.id)
+    //   .count('* as discussion')
+    // const assignmentCount = await Assignment.query()
+    //   .where('group_id', group.id)
+    //   .count('* as assignment')
     const data = [
       group,
       {
