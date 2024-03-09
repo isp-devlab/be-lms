@@ -35,6 +35,9 @@ export default class Discussion extends BaseModel {
   public mentor: BelongsTo<typeof Mentor>
 
   @column()
+  public title: string
+
+  @column()
   public content: string
 
   @column.dateTime({ autoCreate: true })

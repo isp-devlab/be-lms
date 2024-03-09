@@ -1,15 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import {
-  column,
-  BelongsTo,
-  beforeSave,
-  BaseModel,
-  beforeCreate,
-  belongsTo,
-} from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, beforeCreate } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
-import Role from './Role'
 
 export default class User extends BaseModel {
   @beforeCreate()
@@ -19,12 +11,6 @@ export default class User extends BaseModel {
 
   @column({ isPrimary: true })
   public id: string
-
-  @column({ serializeAs: null })
-  public roleId: string | undefined
-
-  @belongsTo(() => Role)
-  public role: BelongsTo<typeof Role>
 
   @column()
   public name: string

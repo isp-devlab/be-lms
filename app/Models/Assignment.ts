@@ -1,8 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Mentor from './Mentor'
 import Group from './Group'
 import uuid from 'uuid-wand'
+import Attachment from './Attachment'
 
 export default class Assignment extends BaseModel {
   @beforeCreate()
@@ -26,7 +35,10 @@ export default class Assignment extends BaseModel {
   public group: BelongsTo<typeof Group>
 
   @column()
-  public startTime: DateTime
+  public title: string
+
+  @column()
+  public content: string
 
   @column()
   public endTime: DateTime
@@ -36,4 +48,7 @@ export default class Assignment extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Attachment)
+  public attachment: HasMany<typeof Attachment>
 }
