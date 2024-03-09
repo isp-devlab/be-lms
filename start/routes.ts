@@ -64,8 +64,11 @@ Route.group(() => {
     }).middleware('auth')
 
     Route.group(() => {
-      Route.get('/:id', 'GroupsController.show')
       Route.post('/join', 'GroupsController.join')
+      Route.get('/:id', 'GroupsController.show')
+      Route.get('/:id/discussion', 'DiscussionsController.index')
+      Route.get('/:id/discussion/:id_discussion', 'DiscussionsController.show')
+      Route.post('/:id/discussion/:id_discussion', 'DiscussionsController.comment')
     })
       .middleware('auth')
       .prefix('/group')

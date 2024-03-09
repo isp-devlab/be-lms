@@ -16,7 +16,7 @@ export default class Teacher extends BaseModel {
   public groupId: string | undefined
 
   @belongsTo(() => Group)
-  public grupu: BelongsTo<typeof Group>
+  public group: BelongsTo<typeof Group>
 
   @column()
   public mentorId: string | undefined

@@ -1,8 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Mentor from './Mentor'
 import Group from './Group'
 import uuid from 'uuid-wand'
+import Comment from './Comment'
 
 export default class Discussion extends BaseModel {
   @beforeCreate()
@@ -25,9 +34,15 @@ export default class Discussion extends BaseModel {
   @belongsTo(() => Mentor)
   public mentor: BelongsTo<typeof Mentor>
 
+  @column()
+  public content: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Comment)
+  public comment: HasMany<typeof Comment>
 }
