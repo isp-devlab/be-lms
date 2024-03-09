@@ -15,16 +15,16 @@ export default class Mentor extends BaseModel {
   @column()
   public name: string
 
-  @column()
+  @column({ serializeAs: null })
   public phoneNumber: string
 
-  @column()
+  @column({ serializeAs: null })
   public email: string
 
   @column({ serializeAs: null })
   public password: string
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken: string | null
 
   @column()

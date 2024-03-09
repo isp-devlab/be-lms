@@ -59,10 +59,10 @@ export default class AuthController {
   }
 
   public async me({ auth, response }: HttpContextContract) {
-    const user = await auth.use('api').authenticate()
+    const getUser = await auth.use('api').authenticate()
     // Assuming you want to preload the 'role' relationship
-    await user.preload('role')
-    return ApiResponse.ok(response, { user }, 'User details fetched successfully')
+    const user = await Database.from('users').select('*').where('id', getUser.id).first()
+    return ApiResponse.ok(response, user, 'User details fetched successfully')
   }
 
   public async forget({ request, response }: HttpContextContract) {
