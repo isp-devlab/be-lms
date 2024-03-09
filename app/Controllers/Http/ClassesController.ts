@@ -30,6 +30,7 @@ export default class ClassesController {
       .preload('student', (query) => {
         query.preload('user')
       })
+      .first()
     return ApiResponse.ok(response, data, 'Class show retrieved successfully')
   }
 
