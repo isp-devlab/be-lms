@@ -1,6 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, beforeCreate, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
+import Member from './Member'
+import Teacher from './Teacher'
+import Discussion from './Discussion'
+import Assignment from './Assignment'
 
 export default class Group extends BaseModel {
   @beforeCreate()
@@ -25,4 +29,16 @@ export default class Group extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Member)
+  public member: HasMany<typeof Member>
+
+  @hasMany(() => Teacher)
+  public teacher: HasMany<typeof Teacher>
+
+  @hasMany(() => Discussion)
+  public discussion: HasMany<typeof Discussion>
+
+  @hasMany(() => Assignment)
+  public assignment: HasMany<typeof Assignment>
 }

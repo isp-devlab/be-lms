@@ -1,40 +1,35 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import ApiResponse from 'App/Helpers/ApiResponse'
 import Group from 'App/Models/Group'
 import Member from 'App/Models/Member'
-import Teacher from 'App/Models/Teacher'
 
 export default class GroupsController {
   public async show({ response, params, auth }: HttpContextContract) {
     const getUser = await auth.use('api').authenticate()
 
-    const group = await Group.find(params.id)
-    if (!group) return ApiResponse.badRequest(response, 'No data to show.')
-
     const memberCheck = await Member.query()
-      .where('group_id', group.id)
+      .where('group_id', params.id)
       .where('user_id', getUser.id)
       .first()
     if (!memberCheck) return ApiResponse.forbidden(response, 'Access denied')
 
-    const member = await Member.query().where('group_id', group.id).preload('user')
-    const teacher = await Teacher.query().where('group_id', group.id).preload('mentor')
-    // const discussionCount = await Discussion.query()
-    //   .where('group_id', group.id)
-    //   .count('* as discussion')
-    // const assignmentCount = await Assignment.query()
-    //   .where('group_id', group.id)
-    //   .count('* as assignment')
-    const data = [
-      group,
-      {
-        member: member,
-      },
-      {
-        mentor: teacher,
-      },
-    ]
+    const data = await Group.query()
+      .where('id', params.id)
+      .preload('member', (postsQuery) => {
+        postsQuery.preload('user')
+      })
+      .preload('teacher', (postsQuery) => {
+        postsQuery.preload('mentor')
+      })
+      .withCount('discussion', (query) => {
+        query.as('discussionCount')
+      })
+      .withCount('assignment', (query) => {
+        query.as('assignmentCount')
+      })
+      .first()
+    if (!data) return ApiResponse.badRequest(response, 'No data to show.')
     return ApiResponse.ok(response, data, 'Group retrieved successfully')
   }
 
