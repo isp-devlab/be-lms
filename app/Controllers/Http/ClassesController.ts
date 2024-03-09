@@ -3,6 +3,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Class from 'App/Models/Class'
 import ApiResponse from 'App/Helpers/ApiResponse'
+import { schema } from '@ioc:Adonis/Core/Validator'
+import Student from 'App/Models/Student'
 
 export default class ClassesController {
   public async index({ request, response }: HttpContextContract) {
@@ -29,5 +31,28 @@ export default class ClassesController {
         query.preload('user')
       })
     return ApiResponse.ok(response, data, 'Class show retrieved successfully')
+  }
+
+  public async join({ request, response, auth }: HttpContextContract) {
+    const getUser = await auth.use('api').authenticate()
+    const groupJoinSchema = schema.create({
+      classId: schema.string(),
+    })
+    const payload = await request.validate({ schema: groupJoinSchema })
+    const classes = await Class.query().where('id', payload.classId).first()
+    if (!classes) return ApiResponse.badRequest(response, 'No data')
+    // return classes
+    const studentCheck = await Student.query()
+      .where('class_id', classes.id)
+      .where('user_id', getUser.id)
+      .first()
+    if (studentCheck) return ApiResponse.conflict(response, 'Student already joined')
+
+    const student = new Student()
+    student.classId = classes.id
+    student.userId = getUser.id
+    const data = await student.save()
+
+    return ApiResponse.ok(response, data, 'Student joined successfully')
   }
 }

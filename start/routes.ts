@@ -76,6 +76,7 @@ Route.group(() => {
     Route.group(() => {
       Route.get('/', 'ClassesController.index')
       Route.get('/:slug', 'ClassesController.show')
+      Route.post('/join', 'ClassesController.join').middleware('auth')
     }).prefix('/class')
   }).prefix('/v1')
 }).prefix('/api')
