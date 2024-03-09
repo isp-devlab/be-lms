@@ -55,4 +55,21 @@ export default class GroupsController {
 
     return ApiResponse.ok(response, group, 'Member joined successfully')
   }
+
+  public async leave({ response, auth, params }: HttpContextContract) {
+    const getUser = await auth.use('api').authenticate()
+    const group = await Group.query().where('id', params.id).first()
+    if (!group) return ApiResponse.badRequest(response, 'No data')
+
+    const memberCheck = await Member.query()
+      .where('group_id', group.id)
+      .where('user_id', getUser.id)
+      .first()
+    if (!memberCheck) return ApiResponse.forbidden(response, 'Access denied')
+
+    const member = await Member.find(memberCheck.id)
+    const data = await member?.delete()
+
+    return ApiResponse.ok(response, data, 'Member Leave successfully')
+  }
 }
