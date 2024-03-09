@@ -19,7 +19,7 @@ export default class extends BaseSchema {
       table.string('email', 255).notNullable().unique().index()
       table.string('password', 180).notNullable().index()
       table.string('remember_me_token').nullable()
-      table.string('image')
+      table.string('image').nullable()
       table.boolean('is_active').defaultTo(true)
       table.boolean('is_student').defaultTo(false)
       table.timestamp('created_at', { useTz: true }).notNullable()

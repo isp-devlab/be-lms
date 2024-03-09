@@ -20,7 +20,7 @@ export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: string
 
-  @column()
+  @column({ serializeAs: null })
   public roleId: string | undefined
 
   @belongsTo(() => Role)
@@ -29,22 +29,22 @@ export default class User extends BaseModel {
   @column()
   public name: string
 
-  @column()
+  @column({ serializeAs: null })
   public phoneNumber: string
 
-  @column()
+  @column({ serializeAs: null })
   public email: string
 
   @column({ serializeAs: null })
   public password: string
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken: string | null
 
   @column()
   public image: string | null
 
-  @column()
+  @column({ serializeAs: null })
   public isStudent: boolean
 
   @column.dateTime({ autoCreate: true })

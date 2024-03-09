@@ -72,5 +72,10 @@ Route.group(() => {
     })
       .middleware('auth')
       .prefix('/group')
+
+    Route.group(() => {
+      Route.get('/', 'ClassesController.index')
+      Route.get('/:slug', 'ClassesController.show')
+    }).prefix('/class')
   }).prefix('/v1')
 }).prefix('/api')
