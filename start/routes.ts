@@ -27,6 +27,7 @@ Route.group(() => {
   Route.group(() => {
     Route.group(() => {
       Route.get('/', 'CategoriesController.index')
+      Route.get('/:slug', 'CategoriesController.show')
     }).prefix('/category')
 
     Route.group(() => {
