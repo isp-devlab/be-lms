@@ -4,6 +4,7 @@ import ApiResponse from 'App/Helpers/ApiResponse'
 import User from 'App/Models/User'
 import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 import Member from 'App/Models/Member'
+import Student from 'App/Models/Student'
 
 export default class ProfilesController {
   public async update({ auth, request, response }: HttpContextContract) {
@@ -68,5 +69,18 @@ export default class ProfilesController {
       })
 
     return ApiResponse.ok(response, data, 'My group retrieved successfully')
+  }
+
+  public async class({ auth, response }: HttpContextContract) {
+    const getUser = await auth.use('api').authenticate()
+
+    const data = await Student.query()
+      .where('user_id', getUser.id)
+      .preload('class', (query) => {
+        query.preload('mentor')
+        query.preload('category')
+      })
+
+    return ApiResponse.ok(response, data, 'My Class retrieved successfully')
   }
 }
