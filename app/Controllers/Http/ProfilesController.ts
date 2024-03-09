@@ -3,6 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import ApiResponse from 'App/Helpers/ApiResponse'
 import User from 'App/Models/User'
 import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
+import Member from 'App/Models/Member'
 
 export default class ProfilesController {
   public async update({ auth, request, response }: HttpContextContract) {
@@ -53,5 +54,19 @@ export default class ProfilesController {
     const data = await user.save()
 
     return ApiResponse.ok(response, data, 'Password change successfully')
+  }
+
+  public async group({ auth, response }: HttpContextContract) {
+    const getUser = await auth.use('api').authenticate()
+
+    const data = await Member.query()
+      .where('user_id', getUser.id)
+      .preload('group', (query) => {
+        query.preload('member', (query) => {
+          query.preload('user')
+        })
+      })
+
+    return ApiResponse.ok(response, data, 'My group retrieved successfully')
   }
 }

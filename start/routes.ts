@@ -61,6 +61,7 @@ Route.group(() => {
     Route.group(() => {
       Route.put('/profile', 'ProfilesController.update')
       Route.put('/profile/change-password', 'ProfilesController.changePassword')
+      Route.get('/profile/group', 'ProfilesController.group')
     }).middleware('auth')
 
     Route.group(() => {
