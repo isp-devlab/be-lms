@@ -73,6 +73,8 @@ Route.group(() => {
       Route.get('/:id/discussion', 'DiscussionsController.index')
       Route.get('/:id/discussion/:id_discussion', 'DiscussionsController.show')
       Route.post('/:id/discussion/:id_discussion', 'DiscussionsController.comment')
+      Route.get('/:id/assignment', 'AssignmentsController.index')
+      Route.get('/:id/assignment/:id_assignment', 'AssignmentsController.show')
     })
       .middleware('auth')
       .prefix('/group')

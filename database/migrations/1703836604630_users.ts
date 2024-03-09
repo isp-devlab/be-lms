@@ -6,14 +6,6 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
-      table
-        .uuid('role_id')
-        // .unsigned()
-        .references('id')
-        .inTable('roles')
-        .onDelete('CASCADE')
-        .onUpdate('RESTRICT')
-        .nullable()
       table.string('name').notNullable()
       table.string('phone_number').notNullable()
       table.string('email', 255).notNullable().unique().index()

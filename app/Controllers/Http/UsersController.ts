@@ -8,13 +8,13 @@ export default class UsersController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
-    const data = await User.query().preload('role').paginate(page, limit)
-    return ApiResponse.ok(response, data, 'Roles retrieved successfully')
+    const data = await User.query().paginate(page, limit)
+    return ApiResponse.ok(response, data, 'User retrieved successfully')
   }
 
   public async show({ params, response }: HttpContextContract) {
-    const data = await User.query().where('id', params.id).preload('role').first()
-    return ApiResponse.ok(response, data, 'Roles retrieved successfully')
+    const data = await User.query().where('id', params.id).first()
+    return ApiResponse.ok(response, data, 'User show retrieved successfully')
   }
 
   public async store({ request, response }: HttpContextContract) {
@@ -26,7 +26,6 @@ export default class UsersController {
         size: '2mb',
         extnames: ['jpg', 'gif', 'png'],
       }),
-      roleId: schema.string.optional([rules.exists({ table: 'roles', column: 'id' })]),
     })
     const payload = await request.validate({ schema: newUserSchema })
 
@@ -38,7 +37,6 @@ export default class UsersController {
     user.email = payload.email
     user.password = payload.password
     user.image = imagePath.url
-    user.roleId = payload.roleId
     const data = await user.save()
     return ApiResponse.created(response, data, 'User created successfully')
   }
@@ -59,7 +57,6 @@ export default class UsersController {
         size: '2mb',
         extnames: ['jpg', 'gif', 'png'],
       }),
-      roleId: schema.string.optional([rules.exists({ table: 'roles', column: 'id' })]),
     })
     const payload = await request.validate({ schema: updateUserSchema })
 
@@ -70,7 +67,6 @@ export default class UsersController {
     if (payload.password) {
       user.password = payload.password
     }
-    user.roleId = payload.roleId
     // Handle file upload for the image
     if (payload.image) {
       const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
