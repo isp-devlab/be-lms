@@ -66,6 +66,7 @@ Route.group(() => {
     Route.group(() => {
       Route.post('/join', 'GroupsController.join')
       Route.get('/:id', 'GroupsController.show')
+      Route.delete('/:id/leave', 'GroupsController.leave')
       Route.get('/:id/discussion', 'DiscussionsController.index')
       Route.get('/:id/discussion/:id_discussion', 'DiscussionsController.show')
       Route.post('/:id/discussion/:id_discussion', 'DiscussionsController.comment')
