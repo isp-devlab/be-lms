@@ -41,7 +41,6 @@ export default class ClassesController {
     const payload = await request.validate({ schema: groupJoinSchema })
     const classes = await Class.query().where('id', payload.classId).first()
     if (!classes) return ApiResponse.badRequest(response, 'No data')
-    // return classes
     const studentCheck = await Student.query()
       .where('class_id', classes.id)
       .where('user_id', getUser.id)
