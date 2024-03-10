@@ -1,8 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
 import Mentor from './Mentor'
 import Category from './Category'
+import Lesson from './Lesson'
+import Student from './Student'
 
 export default class Class extends BaseModel {
   @beforeCreate()
@@ -12,6 +22,9 @@ export default class Class extends BaseModel {
 
   @column({ isPrimary: true })
   public id: string
+
+  @column()
+  public slug: string
 
   @column()
   public categoryId: string | undefined
@@ -32,7 +45,7 @@ export default class Class extends BaseModel {
   public description: string
 
   @column()
-  public price: string
+  public price: number
 
   @column()
   public thumbnailPath: string
@@ -40,9 +53,18 @@ export default class Class extends BaseModel {
   @column()
   public grade: string
 
+  @column()
+  public isActive: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Lesson)
+  public lesson: HasMany<typeof Lesson>
+
+  @hasMany(() => Student)
+  public student: HasMany<typeof Student>
 }

@@ -1,13 +1,12 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Assignment from './Assignment'
-import Class from './Class'
 import User from './User'
 import uuid from 'uuid-wand'
 
 export default class Attachment extends BaseModel {
   @beforeCreate()
-  public static async createUUID(model: Class) {
+  public static async createUUID(model: Attachment) {
     model.id = uuid.v4()
   }
 
@@ -27,7 +26,10 @@ export default class Attachment extends BaseModel {
   public user: BelongsTo<typeof User>
 
   @column()
-  public attachmentPath: string
+  public content: string | null | undefined
+
+  @column()
+  public attachmentPath: string | null | undefined
 
   @column()
   public submitedTime: DateTime

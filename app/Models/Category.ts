@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, beforeCreate, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
+import Class from './Class'
 
 export default class Category extends BaseModel {
   @beforeCreate()
@@ -12,6 +13,9 @@ export default class Category extends BaseModel {
   public id: string
 
   @column()
+  public slug: string
+
+  @column()
   public name: string
 
   @column.dateTime({ autoCreate: true })
@@ -19,4 +23,7 @@ export default class Category extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasMany(() => Class)
+  public class: HasMany<typeof Class>
 }

@@ -26,6 +26,11 @@ Route.get('/', async () => {
 Route.group(() => {
   Route.group(() => {
     Route.group(() => {
+      Route.get('/', 'CategoriesController.index')
+      Route.get('/:slug', 'CategoriesController.show')
+    }).prefix('/category')
+
+    Route.group(() => {
       Route.post('/register', 'AuthController.register')
       Route.post('/login', 'AuthController.login')
       Route.post('/logout', 'AuthController.logout').middleware('auth')
@@ -57,10 +62,28 @@ Route.group(() => {
     Route.group(() => {
       Route.put('/profile', 'ProfilesController.update')
       Route.put('/profile/change-password', 'ProfilesController.changePassword')
+      Route.get('/profile/group', 'ProfilesController.group')
+      Route.get('/profile/class', 'ProfilesController.class')
     }).middleware('auth')
 
     Route.group(() => {
-      Route.get('/', 'CategoriesController.index')
-    }).prefix('/category')
+      Route.post('/join', 'GroupsController.join')
+      Route.get('/:id', 'GroupsController.show')
+      Route.delete('/:id/leave', 'GroupsController.leave')
+      Route.get('/:id/discussion', 'DiscussionsController.index')
+      Route.get('/:id/discussion/:id_discussion', 'DiscussionsController.show')
+      Route.post('/:id/discussion/:id_discussion', 'DiscussionsController.comment')
+      Route.get('/:id/assignment', 'AssignmentsController.index')
+      Route.get('/:id/assignment/:id_assignment', 'AssignmentsController.show')
+      Route.post('/:id/assignment/:id_assignment', 'AssignmentsController.attachments')
+    })
+      .middleware('auth')
+      .prefix('/group')
+
+    Route.group(() => {
+      Route.get('/', 'ClassesController.index')
+      Route.get('/:slug', 'ClassesController.show')
+      Route.post('/join', 'ClassesController.join').middleware('auth')
+    }).prefix('/class')
   }).prefix('/v1')
 }).prefix('/api')

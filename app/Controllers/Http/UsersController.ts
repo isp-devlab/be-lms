@@ -2,19 +2,19 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import ApiResponse from 'App/Helpers/ApiResponse'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
-import Application from '@ioc:Adonis/Core/Application'
+import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 
 export default class UsersController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
-    const data = await User.query().preload('role').paginate(page, limit)
-    return ApiResponse.ok(response, data, 'Roles retrieved successfully')
+    const data = await User.query().paginate(page, limit)
+    return ApiResponse.ok(response, data, 'User retrieved successfully')
   }
 
   public async show({ params, response }: HttpContextContract) {
-    const data = await User.query().where('id', params.id).preload('role').first()
-    return ApiResponse.ok(response, data, 'Roles retrieved successfully')
+    const data = await User.query().where('id', params.id).first()
+    return ApiResponse.ok(response, data, 'User show retrieved successfully')
   }
 
   public async store({ request, response }: HttpContextContract) {
@@ -26,19 +26,17 @@ export default class UsersController {
         size: '2mb',
         extnames: ['jpg', 'gif', 'png'],
       }),
-      roleId: schema.string.optional([rules.exists({ table: 'roles', column: 'id' })]),
     })
     const payload = await request.validate({ schema: newUserSchema })
 
     // Handle file upload for the image
-    await payload.image.move(Application.publicPath('user'))
+    const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
 
     const user = new User()
     user.name = payload.name
     user.email = payload.email
     user.password = payload.password
-    user.image = payload.image?.clientName
-    user.roleId = payload.roleId
+    user.image = imagePath.url
     const data = await user.save()
     return ApiResponse.created(response, data, 'User created successfully')
   }
@@ -59,14 +57,8 @@ export default class UsersController {
         size: '2mb',
         extnames: ['jpg', 'gif', 'png'],
       }),
-      roleId: schema.string.optional([rules.exists({ table: 'roles', column: 'id' })]),
     })
     const payload = await request.validate({ schema: updateUserSchema })
-
-    // Handle file upload for the image
-    if (payload.image) {
-      await payload.image.move(Application.publicPath('user'))
-    }
 
     const user = await User.find(params.id)
     if (!user) return ApiResponse.badRequest(response, 'No data to update.')
@@ -75,9 +67,10 @@ export default class UsersController {
     if (payload.password) {
       user.password = payload.password
     }
-    user.roleId = payload.roleId
+    // Handle file upload for the image
     if (payload.image) {
-      user.image = payload.image?.clientName
+      const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
+      user.image = imagePath.url
     }
     const data = await user.save()
 

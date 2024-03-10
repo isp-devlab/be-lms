@@ -24,7 +24,8 @@
     "@adonisjs/lucid",
     "@adonisjs/auth",
     "@adonisjs/mail",
-    "@adonisjs/view"
+    "@adonisjs/view",
+    "adonisjs-cloudinary"
   ],
   "aceProviders": [
     "@adonisjs/repl"
