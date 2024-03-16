@@ -24,6 +24,9 @@ export default class Lesson extends BaseModel {
   @column()
   public content: string
 
+  @column()
+  public lessonVideo: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
