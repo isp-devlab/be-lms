@@ -40,6 +40,9 @@ export default class Discussion extends BaseModel {
   @column()
   public content: string
 
+  @column()
+  public attachFile: JSON | null | undefined
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

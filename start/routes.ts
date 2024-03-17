@@ -20,7 +20,11 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async () => {
-  return { hello: 'world' }
+  return {
+    projects: process.env.APP_NAME,
+    version: process.env.APP_VERSION,
+    type: process.env.NODE_ENV,
+  }
 })
 
 Route.group(() => {
@@ -38,26 +42,6 @@ Route.group(() => {
       Route.post('/forget', 'AuthController.forget')
       Route.post('/reset', 'AuthController.reset')
     }).prefix('/auth')
-
-    Route.group(() => {
-      Route.resource('role', 'RolesController').only([
-        'index',
-        'show',
-        'store',
-        'update',
-        'destroy',
-      ])
-    }).middleware('auth')
-
-    Route.group(() => {
-      Route.resource('user', 'UsersController').only([
-        'index',
-        'show',
-        'store',
-        'update',
-        'destroy',
-      ])
-    }).middleware('auth')
 
     Route.group(() => {
       Route.put('/profile', 'ProfilesController.update')

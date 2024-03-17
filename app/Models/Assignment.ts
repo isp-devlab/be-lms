@@ -41,6 +41,9 @@ export default class Assignment extends BaseModel {
   public content: string
 
   @column()
+  public attachFile: JSON | null | undefined
+
+  @column()
   public endTime: DateTime
 
   @column.dateTime({ autoCreate: true })

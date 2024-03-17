@@ -24,6 +24,7 @@ export default class extends BaseSchema {
         .notNullable()
       table.string('title').notNullable()
       table.string('content').notNullable()
+      table.json('attach_file').nullable()
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
