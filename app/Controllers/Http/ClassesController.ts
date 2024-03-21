@@ -12,7 +12,7 @@ export default class ClassesController {
     const limit = request.input('limit', 10)
     const q = request.input('q', '')
     const data = await Class.query()
-      .where('name', 'LIKE', `%${q}%`)
+      .where('name', 'ILIKE', `%${q}%`)
       .where('is_active', true)
       .preload('category')
       .preload('mentor')

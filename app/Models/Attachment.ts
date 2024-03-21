@@ -1,8 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, beforeCreate, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasOne,
+  beforeCreate,
+  belongsTo,
+  column,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import Assignment from './Assignment'
 import User from './User'
 import uuid from 'uuid-wand'
+import Evaluation from './Evaluation'
 
 export default class Attachment extends BaseModel {
   @beforeCreate()
@@ -42,4 +51,7 @@ export default class Attachment extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasOne(() => Evaluation)
+  public evaluation: HasOne<typeof Evaluation>
 }

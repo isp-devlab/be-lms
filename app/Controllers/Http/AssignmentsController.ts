@@ -10,7 +10,6 @@ import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 export default class AssignmentsController {
   public async index({ response, params, auth, request }: HttpContextContract) {
     const getUser = await auth.use('api').authenticate()
-
     const memberCheck = await Member.query()
       .where('group_id', params.id)
       .where('user_id', getUser.id)
