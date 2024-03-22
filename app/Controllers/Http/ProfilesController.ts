@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import ApiResponse from 'App/Helpers/ApiResponse'
+import UploadHelper from 'App/Helpers/UploadHelper'
 import User from 'App/Models/User'
 import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 import Member from 'App/Models/Member'
@@ -33,8 +34,8 @@ export default class ProfilesController {
     user.email = payload.email
     // Handle file upload for the image
     if (payload.image) {
-      const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
-      user.image = imagePath.url
+      const imagePath = await UploadHelper.upload(payload.image, 'user')
+      user.image = imagePath
     }
     user.phoneNumber = payload.phoneNumber
     const data = await user.save()

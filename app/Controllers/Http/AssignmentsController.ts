@@ -6,6 +6,7 @@ import Attachment from 'App/Models/Attachment'
 import Member from 'App/Models/Member'
 import { DateTime } from 'luxon'
 import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
+import UploadHelper from 'App/Helpers/UploadHelper'
 
 export default class AssignmentsController {
   public async index({ response, params, auth, request }: HttpContextContract) {
@@ -97,12 +98,12 @@ export default class AssignmentsController {
     attachment.assignmentId = params.id_assignment
     attachment.content = payload.content
     if (payload.file) {
-      const filePath = await cloudinary.upload(payload.file, payload.file.clientName)
+      const filePath = await UploadHelper.upload(payload.file, 'group_' + params.id + '/attachment')
       attachment.attachmentPath = filePath.url
     }
     attachment.submitedTime = DateTime.now()
     const data = await attachment.save()
 
-    return ApiResponse.ok(response, data, 'Discussion show retrieved successfully')
+    return ApiResponse.ok(response, data, 'Atachment created successfully')
   }
 }
