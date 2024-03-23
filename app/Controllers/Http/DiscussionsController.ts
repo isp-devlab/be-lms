@@ -65,6 +65,6 @@ export default class DiscussionsController {
     comment.content = payload.comment
     const data = await comment.save()
 
-    return ApiResponse.ok(response, data, 'Discussion show retrieved successfully')
+    return ApiResponse.ok(response, data, 'Comment created successfully')
   }
 }

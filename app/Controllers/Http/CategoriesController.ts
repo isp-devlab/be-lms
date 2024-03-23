@@ -15,6 +15,7 @@ export default class CategoriesController {
         query.preload('mentor')
         query.preload('category')
       })
+
     return ApiResponse.ok(response, data, 'Category show retrieved successfully')
   }
 }

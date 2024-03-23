@@ -44,11 +44,14 @@ Route.group(() => {
     }).prefix('/auth')
 
     Route.group(() => {
-      Route.put('/profile', 'ProfilesController.update')
-      Route.put('/profile/change-password', 'ProfilesController.changePassword')
-      Route.get('/profile/group', 'ProfilesController.group')
-      Route.get('/profile/class', 'ProfilesController.class')
-    }).middleware('auth')
+      Route.put('/', 'ProfilesController.update')
+      Route.put('/change-password', 'ProfilesController.changePassword')
+      Route.get('/group', 'ProfilesController.group')
+      Route.get('/class', 'ProfilesController.class')
+      Route.get('/notification', 'ProfilesController.notification')
+    })
+      .middleware('auth')
+      .prefix('/profile')
 
     Route.group(() => {
       Route.post('/join', 'GroupsController.join')

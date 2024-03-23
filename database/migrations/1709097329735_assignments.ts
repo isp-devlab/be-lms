@@ -23,7 +23,7 @@ export default class extends BaseSchema {
         .onUpdate('RESTRICT')
         .notNullable()
       table.string('title').notNullable()
-      table.string('content').notNullable()
+      table.text('content').notNullable()
       table.json('attach_file').nullable()
       table.timestamp('end_time').notNullable()
       table.timestamp('created_at', { useTz: true })
