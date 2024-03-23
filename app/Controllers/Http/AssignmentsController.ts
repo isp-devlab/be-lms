@@ -45,7 +45,7 @@ export default class AssignmentsController {
       .where('group_id', params.id)
       .preload('mentor')
       .preload('attachment', (query) => {
-        query.where('user_id', getUser.id).preload('user')
+        query.where('user_id', getUser.id).preload('user').preload('evaluation')
       })
       .first()
 
@@ -101,7 +101,6 @@ export default class AssignmentsController {
       const filePath = await UploadHelper.upload(payload.file, 'group_' + params.id + '/attachment')
       attachment.attachmentPath = filePath.url
     }
-    attachment.submitedTime = DateTime.now()
     const data = await attachment.save()
 
     return ApiResponse.ok(response, data, 'Atachment created successfully')

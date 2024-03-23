@@ -24,8 +24,6 @@ export default class extends BaseSchema {
         .notNullable()
       table.string('attachment_path').nullable()
       table.text('content').nullable()
-      table.timestamp('submited_time').notNullable()
-      table.integer('point').nullable()
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

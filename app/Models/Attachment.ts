@@ -35,16 +35,10 @@ export default class Attachment extends BaseModel {
   public user: BelongsTo<typeof User>
 
   @column()
-  public content: string | null | undefined
-
-  @column()
   public attachmentPath: string | null | undefined
 
   @column()
-  public submitedTime: DateTime
-
-  @column()
-  public point: string
+  public content: string | null | undefined
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
