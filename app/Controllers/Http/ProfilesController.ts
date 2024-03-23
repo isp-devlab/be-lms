@@ -1,10 +1,12 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import ApiResponse from 'App/Helpers/ApiResponse'
+import UploadHelper from 'App/Helpers/UploadHelper'
 import User from 'App/Models/User'
-import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
 import Member from 'App/Models/Member'
 import Student from 'App/Models/Student'
+import Notification from 'App/Models/Notification'
+import _ from 'lodash'
 
 export default class ProfilesController {
   public async update({ auth, request, response }: HttpContextContract) {
@@ -33,8 +35,8 @@ export default class ProfilesController {
     user.email = payload.email
     // Handle file upload for the image
     if (payload.image) {
-      const imagePath = await cloudinary.upload(payload.image, payload.image.clientName)
-      user.image = imagePath.url
+      const imagePath = await UploadHelper.upload(payload.image, 'user')
+      user.image = imagePath
     }
     user.phoneNumber = payload.phoneNumber
     const data = await user.save()
@@ -82,5 +84,18 @@ export default class ProfilesController {
       })
 
     return ApiResponse.ok(response, data, 'My Class retrieved successfully')
+  }
+
+  public async notification({ auth, response }: HttpContextContract) {
+    const user = await auth.use('api').authenticate()
+    const members = await Member.query().where('user_id', user.id)
+    const groups = members.map((member) => member.groupId)
+    const data = await Notification.query()
+      .where('user_id', user.id)
+      .orWhereIn('group_id', groups)
+      .limit(10)
+      .orderBy('created_at', 'desc')
+
+    return ApiResponse.ok(response, data, 'Notifiations retrieved successfully')
   }
 }

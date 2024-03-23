@@ -6,11 +6,11 @@ import Attachment from 'App/Models/Attachment'
 import Member from 'App/Models/Member'
 import { DateTime } from 'luxon'
 import cloudinary from '@ioc:Adonis/Addons/Cloudinary'
+import UploadHelper from 'App/Helpers/UploadHelper'
 
 export default class AssignmentsController {
   public async index({ response, params, auth, request }: HttpContextContract) {
     const getUser = await auth.use('api').authenticate()
-
     const memberCheck = await Member.query()
       .where('group_id', params.id)
       .where('user_id', getUser.id)
@@ -45,7 +45,7 @@ export default class AssignmentsController {
       .where('group_id', params.id)
       .preload('mentor')
       .preload('attachment', (query) => {
-        query.where('user_id', getUser.id).preload('user')
+        query.where('user_id', getUser.id).preload('user').preload('evaluation')
       })
       .first()
 
@@ -98,12 +98,11 @@ export default class AssignmentsController {
     attachment.assignmentId = params.id_assignment
     attachment.content = payload.content
     if (payload.file) {
-      const filePath = await cloudinary.upload(payload.file, payload.file.clientName)
+      const filePath = await UploadHelper.upload(payload.file, 'group_' + params.id + '/attachment')
       attachment.attachmentPath = filePath.url
     }
-    attachment.submitedTime = DateTime.now()
     const data = await attachment.save()
 
-    return ApiResponse.ok(response, data, 'Discussion show retrieved successfully')
+    return ApiResponse.ok(response, data, 'Atachment created successfully')
   }
 }

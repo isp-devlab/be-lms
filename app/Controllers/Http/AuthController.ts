@@ -36,12 +36,7 @@ export default class AuthController {
       })
       const payload = await request.validate({ schema: loginSchema })
 
-      const user = await Database.from('users')
-        .select('*')
-        .where('email', payload.email)
-        .where('is_active', true) // Filter for active users
-        .first()
-
+      const user = await User.query().where('email', payload.email).where('is_active', true).first()
       if (!user) {
         return ApiResponse.unauthorized(response, 'Invalid Credentials or Inactive User')
       }
@@ -50,7 +45,6 @@ export default class AuthController {
       const token = await auth.use('api').attempt(email, password, {
         expiresIn: '1 days',
       })
-
       return ApiResponse.ok(
         response,
         { user: user, access_token: token },
@@ -69,7 +63,7 @@ export default class AuthController {
   public async me({ auth, response }: HttpContextContract) {
     const getUser = await auth.use('api').authenticate()
     // Assuming you want to preload the 'role' relationship
-    const user = await Database.from('users').select('*').where('id', getUser.id).first()
+    const user = await User.query().where('id', getUser.id).first()
     return ApiResponse.ok(response, user, 'User details fetched successfully')
   }
 
