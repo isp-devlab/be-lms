@@ -26,6 +26,7 @@ Route.get('/', async () => {
     type: process.env.NODE_ENV,
   }
 })
+Route.get('/activation/:token', 'AuthController.activation')
 
 Route.group(() => {
   Route.group(() => {
