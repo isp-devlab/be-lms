@@ -10,6 +10,7 @@ import {
 } from '@ioc:Adonis/Lucid/Orm'
 import uuid from 'uuid-wand'
 import Member from './Member'
+import Student from './Student'
 
 export default class User extends BaseModel {
   @beforeCreate()
@@ -26,7 +27,7 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public phoneNumber: string
 
-  @column({ serializeAs: null })
+  @column()
   public email: string
 
   @column({ serializeAs: null })
@@ -40,6 +41,9 @@ export default class User extends BaseModel {
 
   @column({ serializeAs: null })
   public isStudent: boolean
+
+  @column()
+  public isActive: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -56,4 +60,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Member)
   public member: HasMany<typeof Member>
+
+  @hasMany(() => Student)
+  public student: HasMany<typeof Student>
 }

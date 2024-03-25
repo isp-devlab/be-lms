@@ -10,7 +10,7 @@ export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
     const registerSchema = schema.create({
       name: schema.string(),
-      phoneNumber: schema.string(),
+      // phoneNumber: schema.string(),
       email: schema.string([rules.email(), rules.unique({ table: 'users', column: 'email' })]),
       password: schema.string([rules.minLength(6)]),
       isStudent: schema.boolean(),
@@ -19,13 +19,45 @@ export default class AuthController {
 
     const user = new User()
     user.name = payload.name
-    user.phoneNumber = payload.phoneNumber
+    user.phoneNumber = request.body().phoneNumber
     user.email = payload.email
     user.password = payload.password
     user.isStudent = payload.isStudent
+    user.isActive = false
     const data = await user.save()
 
+    const token = uuid.v4()
+    await Database.insertQuery().table('account_activation_tokens').insert({
+      email: user.email,
+      token: token,
+    })
+
+    const activationUrl = process.env.HOST + `/activation/${token}`
+    const email = payload.email
+
+    await Mail.send((message) => {
+      message
+        .from('noreply@unimal.link')
+        .to(email)
+        .subject('Aktivasi akun kelas ISP')
+        .htmlView('emails/account_activation', { email, activationUrl })
+    })
+
     return ApiResponse.created(response, data, 'User register created successfully')
+  }
+
+  public async activation({ params, response }: HttpContextContract) {
+    const activationRecord = await Database.from('account_activation_tokens')
+      .where('token', params.token)
+      .first()
+    if (!activationRecord) return 'invalid token'
+
+    const user = await User.findByOrFail('email', activationRecord.email)
+    user.isActive = true
+    await user.save()
+
+    await Database.from('account_activation_tokens').where('email', activationRecord.email).delete()
+    return response.redirect(process.env.FE_URL + `/aktivasi/sukses`)
   }
 
   public async login({ auth, request, response }: HttpContextContract) {
@@ -63,8 +95,17 @@ export default class AuthController {
   public async me({ auth, response }: HttpContextContract) {
     const getUser = await auth.use('api').authenticate()
     // Assuming you want to preload the 'role' relationship
-    const user = await User.query().where('id', getUser.id).first()
-    return ApiResponse.ok(response, user, 'User details fetched successfully')
+    const user = await User.query()
+      .where('id', getUser.id)
+      // .count('id')
+      .preload('member', (memberQuery) => {
+        memberQuery.preload('group')
+      })
+      .preload('student', (postsQuery) => {
+        postsQuery.preload('class')
+      })
+      .first()
+    return ApiResponse.ok(response, user, 'User details retrived successfully')
   }
 
   public async forget({ request, response }: HttpContextContract) {
@@ -87,11 +128,11 @@ export default class AuthController {
         expires_at: new Date(Date.now() + 3600000), // 1 hour expiration
       })
 
-    const resetUrl = `https://your-app-url/reset-password?token=${token}` // Change to your app's reset password page URL
+    const resetUrl = process.env.FE_URL + `/reset-password/${token}?email=${user.email}` // Change to your app's reset password page URL
 
     await Mail.send((message) => {
       message
-        .from('support@metromatika.com')
+        .from('noreply@unimal.link')
         .to(user.email)
         .subject('Reset Password')
         .htmlView('emails/password_reset', { user, resetUrl })

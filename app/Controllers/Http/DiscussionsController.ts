@@ -16,7 +16,7 @@ export default class DiscussionsController {
     if (!memberCheck) return ApiResponse.forbidden(response, 'Access denied')
 
     const page = request.input('page', 1)
-    const limit = request.input('limit', 10)
+    const limit = request.input('limit', 5)
     const data = await Discussion.query()
       .where('group_id', params.id)
       .preload('mentor')
